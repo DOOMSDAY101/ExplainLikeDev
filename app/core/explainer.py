@@ -114,9 +114,9 @@ def explain_code(code: str, experience_level: str) -> str:
     # })
 
     return {
-        "explanation": explanation.strip(),
-        "improvements": improvements.strip(),
-        "common_mistakes": common_mistakes.strip()
+        "explanation": explanation.content,
+        "improvements": improvements.content,
+        "common_mistakes": common_mistakes.content
     }
 
 

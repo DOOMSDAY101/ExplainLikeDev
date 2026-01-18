@@ -12,12 +12,15 @@ class ExplainRequest(BaseModel):
 
 class ExplainResponse(BaseModel):
     explanation: str
+    improvements: str
+    common_mistakes: str
+
 
 
 @router.post("/explain", response_model=ExplainResponse)
 def explain_endpoint(request: ExplainRequest):
-    result = explain_code(
+    return explain_code(
         code=request.code,
         experience_level=request.experience_level
     )
-    return {"explanation": result}
+   
