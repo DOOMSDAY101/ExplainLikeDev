@@ -4,23 +4,39 @@ from app.core.llm import get_llm
 
 
 
+# explanation_prompt = PromptTemplate(
+#     input_variables=["experience_level", "code"],
+#     template="""
+# You are a senior software engineer and teacher.
+
+# Explain the following code to a {experience_level} developer.
+
+# Rules:
+# - Beginner: use simple language, avoid jargon, explain concepts step by step.
+# - Intermediate: explain logic and flow, mention patterns when relevant.
+# - Advanced: focus on design decisions, performance, and edge cases.
+
+# Code:
+# {code}
+
+# Explanation:
+# """
+# )
+
 explanation_prompt = PromptTemplate(
     input_variables=["experience_level", "code"],
-    template="""
-You are a senior software engineer and teacher.
+    template="""You are a senior software engineer explaining code to a {experience_level} developer.
 
-Explain the following code to a {experience_level} developer.
+Provide ONLY a {experience_level}-level explanation. Do not include beginner, intermediate, or advanced labels.
 
-Rules:
-- Beginner: use simple language, avoid jargon, explain concepts step by step.
-- Intermediate: explain logic and flow, mention patterns when relevant.
-- Advanced: focus on design decisions, performance, and edge cases.
+- Beginner: use simple language, avoid jargon, explain step by step
+- Intermediate: explain logic, flow, and patterns
+- Advanced: focus on design decisions, performance, edge cases
 
 Code:
 {code}
 
-Explanation:
-"""
+Provide your explanation now:"""
 )
 
 
@@ -87,32 +103,6 @@ def explain_code(code: str, experience_level: str) -> str:
     improvements = llm.invoke(improvements_prompt_text)
     common_mistakes = llm.invoke(mistakes_prompt_text)
 
-    # explanation_chain = (
-    #     llm
-    #     | explanation_prompt
-    # )
-    # improvements_chain = (
-    #     llm
-    #     | improvements_prompt
-    # )
-    # mistakes_chain = (
-    #     llm
-    #     | mistakes_prompt
-    # )
-
-    # explanation = explanation_chain.invoke({
-    #     "experience_level": experience_level,
-    #     "code": code
-    # })
-
-    # improvements = improvements_chain.invoke({
-    #     "code": code
-    # })
-
-    # common_mistakes = mistakes_chain.invoke({
-    #     "code": code
-    # })
-
     return {
         "explanation": explanation.content,
         "improvements": improvements.content,
@@ -120,13 +110,4 @@ def explain_code(code: str, experience_level: str) -> str:
     }
 
 
-# def explain_code(code: str, experience_level: str) -> str:
-#     """
-#     Takes a code snippet and an experience level and returns an explanation.
-#     """
-#     return {
-#         "explanation": "hello",
-#         "improvements": "hi",
-#         "common_mistakes": "good evening"
-#     }
 
